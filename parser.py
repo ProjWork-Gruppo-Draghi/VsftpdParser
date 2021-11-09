@@ -29,18 +29,18 @@ def getOptions(argv):
     inputfile = '/var/log/vsftpd.log'
     outputfile = '/var/log/parsed-vsftpd.ndjson'
     try:
-        opts, args = getopt.getopt(argv,"hi:o:",["log=","json="])
+        opts, args = getopt.getopt(argv,"hi:o:",["log=","ndjson="])
     except getopt.GetoptError as e:
         print(e.msg)
-        print('Usage: test.py -i <ftplogfile> -o <jsonfile>')
+        print('Usage: test.py -i <ftplogfile> -o <ndjsonfile>')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('Usage: test.py -i <ftplogfile> -o <jsonfile>')
+            print('Usage: test.py -i <ftplogfile> -o <ndjsonfile>')
             sys.exit()
         elif opt in ("-i", "--log"):
             inputfile = arg
-        elif opt in ("-o", "--json"):
+        elif opt in ("-o", "--ndjson"):
             outputfile = arg
 
     return inputfile, outputfile
@@ -51,8 +51,10 @@ def main(argv):
     if exists("./counter.txt"):
         with open("./counter.txt", 'r') as counter_file:
             counter = int(counter_file.read())
+            old_counter = counter
     else:
-        counter = 0            
+        counter = 0
+        old_counter = 0
 
     if exists(outputNdjson):
         with open(outputNdjson, 'r') as logNdjson:
@@ -81,16 +83,17 @@ def main(argv):
                 "Time" : time,
                 "Method" : method
             }
-            if entry['Method']=="Ok Download":
+            if "Download" in entry['Method']:
                 entry['File'] = params[12][1:-2]
             counter = counter + 1
             ndjsonObj.append(entry)
 
     with open(outputNdjson, 'w') as logNdjson:
         ndjson.dump(ndjsonObj, logNdjson)
+        logNdjson.write("\n")
     with open("./counter.txt", 'w') as counter_file:
         counter_file.write(str(counter))
-
+    print(str(counter-old_counter) + " strings parsed.")
 
 if __name__ == '__main__':
     main(sys.argv[1:])
