@@ -14,11 +14,13 @@ We therefore decided to write our own parsing function
 
 ## Install dependencies
 
+First of all, you're gonna need Python version 3.5 or higher. Then, install the requirements:
+
 ```pip3 install -r requirements.txt```
 
 ## How it works
 
-By default this script takes the text from the vsftpd.log file present in /var/log/vsftpd.log and creates one in ndjson format called outputNdjson
+By default this script takes the text from the vsftpd.log file present in /var/log/vsftpd.log and creates one in ndjson format in /var/log/parsed-vsftpd.ndjson
 
 If you want to read and write to specific folders use the following command:
 
@@ -46,7 +48,7 @@ will be parsed in ndjson format:
 {"IP": "82.59.13.178", "Time": "2021-11-03T15:22:37", "Method": "Fail Login"}
 {"IP": "82.59.13.178", "Time": "2021-11-03T15:22:40", "Method": "Connect"}
 {"IP": "82.59.13.178", "Time": "2021-11-03T15:22:43", "Method": "Ok Login"}
-{"IP": "82.59.13.178", "Time": "2021-11-03T15:22:51", "Method": "Ok Download", "File": "/home/user/credentials.txt"
+{"IP": "82.59.13.178", "Time": "2021-11-03T15:22:51", "Method": "Ok Download", "File": "/home/user/credentials.txt"}
 ```
 
 Cool, right?
@@ -66,6 +68,5 @@ Remember to change output with your real output!
 With [this configuration](conf.d/geolocalization.conf)  you can geolocate IP addresses
 
 Remeber to copy the following [file](GeoLite2-City.mmdb) under /home/ubuntu/GeoIP
-
 
 Enjoy your dashboard!
